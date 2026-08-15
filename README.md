@@ -119,5 +119,5 @@ mydfir-splunk-soc-lab/
 ## Credits
 
 Dataset and lab structure from the **[MyDFIR](https://www.mydfir.com/)** SOC
-analyst program (Month 1). All screenshots are my own work carried out in my
+analyst program #MyDFIRFORGE (Month 1). All screenshots are my own work carried out in my
 home lab.
