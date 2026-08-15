@@ -1,0 +1,25 @@
+# ============================================================
+#  Reporting — Scheduled Reports
+# ============================================================
+
+# ---- WALKTHROUGH REPORT ------------------------------------
+# Title       : Daily SSH Server - Outbound coms
+# Description : A daily report showing the top 3 destinations sourcing from
+#               our SSH server (178.128.237.149). Review the destination IP -
+#               is the expected process being followed?
+# Schedule    : Run every day at 0:00 | Time Range: Yesterday
+index="mydfir-lab1" src_ip=178.128.237.149
+| top limit=3 dest_ip
+# -> 178.128.225.222 (62.7%), 43.135.172.223 (5.65%), 104.248.150.105 (5.65%)
+
+# ---- SCENARIO REPORT ---------------------------------------
+# Prompt      : Daily report of successful administrative logins from the day
+#               before. Filter out SYSTEM and machine accounts. Include time,
+#               user and computer, sorted earliest-first.
+# Title       : Daily Windows- Successfull administrative logins
+# Description : Daily report that reviews the successful administrative logins
+#               that occurred the day before.
+# Schedule    : Run every day at 2:00 | Time Range: Yesterday
+index="mydfir-lab1" host="winvm" EventCode=4672 user!=*$ user!=SYSTEM
+| stats count by _time user ComputerName
+| sort +_time

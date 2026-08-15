@@ -1,0 +1,13 @@
+# ============================================================
+#  Scenario — Dashboard Panel: Firewall Exception Added
+# ============================================================
+# Prompt : SOC manager asks for a new panel on the "Windows Activity"
+#          dashboard that surfaces Windows Firewall exception rules that were
+#          ADDED. Include time, Computer, Profile Changed, Rule Name and
+#          Rule ID, sorted earliest-first. Panel name: "Firewall Exception Added".
+#
+# Event ID 4946 = "A rule was added to the Windows Firewall exception list."
+index="mydfir-lab1" host=winvm EventCode=4946
+| stats count by _time,ComputerName,Profile_Changed,Rule_Name,Rule_ID
+| sort _time
+# -> 53 events, earliest first

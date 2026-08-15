@@ -1,0 +1,10 @@
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+desktop.ini
+
+# Never commit the lab archive or extracted app
+*.tgz
+*.zip
+mydfir-splunk/

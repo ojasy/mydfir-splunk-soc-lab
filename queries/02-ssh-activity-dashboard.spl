@@ -1,0 +1,33 @@
+# ============================================================
+#  SSH Activity Dashboard — SPL for all 5 panels
+#  Source: auth.log (linux_auth_logs) | host: linuxvm
+# ============================================================
+
+# ---- Panel 1: Top Failed Account (Single Value) ----
+index="mydfir-lab1" failed source="auth.log" sourcetype=linux_auth_logs
+| top limit=20 user
+# -> root (84.5% of failed logins)
+
+# ---- Panel 2: Top Source IP (Single Value) ----
+index="mydfir-lab1" failed source="auth.log" sourcetype=linux_auth_logs
+| top limit=20 src_ip
+# -> 178.128.225.222
+
+# ---- Panel 3: Failed Attempts by User (Statistics Table) ----
+index="mydfir-lab1" failed source="auth.log" sourcetype=linux_auth_logs
+| stats count by user
+
+# ---- Panel 4: Successful Logins by User (Statistics Table, geo-enriched) ----
+# iplocation resolves the source IP to a country so we can spot
+# logins from unexpected geographies (e.g. root from Greenland).
+index="mydfir-lab1" source="auth.log" sourcetype=linux_auth_logs msg="Accepted password"
+| iplocation src_ip
+| stats count by _time, user, src_ip, Country
+
+# ---- Panel 5: Heatmap of all external activity (Choropleth Map) ----
+# geom joins the country name to the built-in geo_countries polygons.
+# Format > Colors > Color Mode: Categorical
+index="mydfir-lab1" host="linuxvm"
+| iplocation src_ip
+| stats count by Country
+| geom geo_countries allFeatures=True featureIdField=Country

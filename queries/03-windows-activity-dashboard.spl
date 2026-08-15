@@ -1,0 +1,30 @@
+# ============================================================
+#  Windows Activity Dashboard — SPL for all 3 panels
+#  Source: WinEventLog:Security | host: winvm
+#  Key Event IDs: 4624 logon, 4672 special privileges, 4720 new account
+# ============================================================
+
+# ---- Scoping the data ----
+index="mydfir-lab1" host=winvm                          # 993 events (all Windows)
+index="mydfir-lab1" host=winvm EventCode=4624           # 278 events (successful logons)
+index="mydfir-lab1" host=winvm EventCode=4624 user!=*$  # 70 events  (drop machine accounts)
+
+# ---- Panel 1: Successful Logins by User ----
+# Exclude SYSTEM and machine accounts (trailing "$") to focus on humans.
+index="mydfir-lab1" host=winvm EventCode=4624 user!=SYSTEM user!=*$
+| stats count by ComputerName,user,Logon_Type
+
+# ---- Panel 2: Users with Admin Privileges (4672) ----
+# 4672 = "Special privileges assigned to new logon" (admin-equivalent rights).
+#
+# GOTCHA: adding Logon_Type to the by-clause returns 0 rows, because
+# Logon_Type is NOT populated on 4672 events. Grouping by user works.
+#   BROKEN: ... | stats count by ComputerName,user,Logon_Type   -> Statistics(0)
+#   FIXED : ... | stats count by user                           -> kporter (22)
+index="mydfir-lab1" host=winvm EventCode=4672 user!=SYSTEM user!=*$
+| stats count by user
+
+# ---- Panel 3: New User Account Created (4720) ----
+index="mydfir-lab1" host=winvm EventCode=4720 user!=SYSTEM user!=*$
+| stats count by _time,ComputerName,Subject_Account_Name,New_Account_Account_Name
+# -> account "evil" created by kporter on Desktop-IT.elnath.com

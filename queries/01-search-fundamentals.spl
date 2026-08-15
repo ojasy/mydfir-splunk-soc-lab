@@ -1,0 +1,33 @@
+# ============================================================
+#  MyDFIR Splunk Lab — Search Fundamentals (SPL)
+#  Index: mydfir-lab1 | Window: 2024-01-07 00:00 to 2024-01-08 00:00
+#  Total events in dataset: 5,931
+# ============================================================
+
+# Base search — everything in the lab index
+index="mydfir-lab1"
+
+# ---- Field NAMES are case-SENSITIVE ----
+# Capital "Dest_ip" matches no field -> 0 results
+index="mydfir-lab1" Dest_ip="178.128.237.149"     # 0 events   (wrong)
+index="mydfir-lab1" dest_ip="178.128.237.149"     # 2,033 events (correct)
+
+# ---- Field VALUES are case-INSENSITIVE ----
+# "Csv" and "csv" both match the same events
+index="mydfir-lab1" dest_ip="178.128.237.149" sourcetype=Csv   # 2,033 events
+index="mydfir-lab1" dest_ip="178.128.237.149" sourcetype=csv   # 2,033 events
+
+# ---- Narrowing a search with additional terms ----
+index="mydfir-lab1" ssh host=linuxvm                               # 356 events
+index="mydfir-lab1" ssh host=linuxvm source="linuxvm-netlogs.csv"  # 160 events
+
+# ---- stats: count connections for a specific src/dest pair ----
+index="mydfir-lab1" dest_ip=104.248.150.105 host=linuxvm source="linuxvm-netlogs.csv"
+| stats count by src_ip,dest_ip
+# -> 112 events between 178.128.237.149 and 104.248.150.105
+
+# ---- table: shape the same result into columns ----
+# Note: the "Src_ip" column comes back EMPTY (case-sensitive field name),
+# while "src_ip" is populated. Good reminder of the case rule above.
+index="mydfir-lab1" dest_ip=104.248.150.105 host=linuxvm source="linuxvm-netlogs.csv"
+| table _time,dest_ip,src_ip,Src_ip
