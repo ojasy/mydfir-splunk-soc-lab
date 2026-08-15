@@ -68,11 +68,4 @@ Built first in the default light theme, then finalised in dark mode:
 ![Dashboard light](../screenshots/02-ssh-dashboard/11-dashboard-light-theme.png)
 ![Dashboard final dark](../screenshots/02-ssh-dashboard/12-dashboard-final-dark.png)
 
-## Day 26 accountability prompt
 
-> *What's your experience when it comes to building dashboards? Was this your first time?*
-
-Building Splunk dashboards from raw auth logs was new to me. The biggest
-takeaway was that a good panel starts from an investigative question ("who is
-being targeted?"), not from a chart type — the visualisation is chosen last, to
-fit the answer.
