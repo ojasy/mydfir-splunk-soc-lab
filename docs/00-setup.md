@@ -32,11 +32,3 @@ Getting the MyDFIR app installed and the environment ready to search.
 
    ![Index active](../screenshots/00-setup/03-index-mydfir-lab1-active.png)
 
-## Day 24 accountability prompt
-
-> *What log source did you search in Splunk today, and what field stood out to you?*
-
-Searched `auth.log` (`sourcetype=linux_auth_logs`). The field that stood out was
-`user` — pivoting on it immediately exposed that a single account (`root`)
-absorbed the overwhelming majority of failed logins, which set the direction for
-the whole SSH dashboard.
