@@ -78,13 +78,4 @@ Base search is the Event 4720 detection from the Windows dashboard:
 ![Scenario save alert](../screenshots/04-alerts/12-scenario-save-alert-t1136.png)
 ![Scenario alert saved](../screenshots/04-alerts/13-scenario-alert-saved-t1136.png)
 
-## Day 27 accountability prompt
 
-> *What alert and report did you create in Splunk today, and who would benefit
-> from reading it in a real SOC?*
-
-Created the T1078 SSH-auth alert and the T1136 new-account alert. In a real SOC
-the SSH-auth alert would feed the tier-1 triage queue (fast OSINT + pivot on the
-source IP), while the new-account alert is high-signal for tier-2 / IR — account
-creation outside a change window is a classic persistence indicator worth an
-immediate look.
